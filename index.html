@@ -1115,21 +1115,55 @@
         // 初始化显示中文
         switchLanguage('zh');
 
-        document.getElementById('search-button').addEventListener('click', searchTools);
-        document.getElementById('search-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchTools();
+        // 修复搜索功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchButton = document.getElementById('search-button');
+            const searchInput = document.getElementById('search-input');
+            
+            if (searchButton && searchInput) {
+                searchButton.addEventListener('click', searchTools);
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        searchTools();
+                    }
+                });
             }
+            
+            // 初始化筛选功能
+            const ratingFilter = document.getElementById('rating-filter');
+            if (ratingFilter) {
+                ratingFilter.addEventListener('change', filterByRating);
+            }
+            
+            // 初始化返回顶部按钮
+            initBackToTop();
+            
+            // 初始化工具点击统计
+            initToolClickTracking();
         });
 
         function searchTools() {
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            if (!searchTerm.trim()) {
+                resetDisplay();
+                return;
+            }
+            
             const cards = document.querySelectorAll('.link-card');
             let found = false;
             
             cards.forEach(card => {
-                const title = card.querySelector('.title-text').textContent.toLowerCase();
-                const description = card.querySelector('.link-description:not([style*="display: none"])').textContent.toLowerCase();
+                // 获取标题文本 - 适应新的标题结构
+                let titleElement = card.querySelector('.title-text');
+                if (!titleElement) {
+                    // 兼容旧结构
+                    titleElement = card.querySelector('.link-title');
+                }
+                const title = titleElement ? titleElement.textContent.toLowerCase() : '';
+                
+                // 获取当前显示的描述
+                const currentLang = document.documentElement.lang;
+                const description = card.querySelector(`.link-description.lang-${currentLang}`).textContent.toLowerCase();
                 
                 if (title.includes(searchTerm) || description.includes(searchTerm)) {
                     card.style.display = 'flex';
@@ -1140,66 +1174,126 @@
             });
             
             // 显示搜索结果提示
-            const resultMessage = document.getElementById('search-results');
-            if (resultMessage) {
-                if (!found) {
-                    resultMessage.textContent = document.documentElement.lang === 'zh' ? 
-                        '没有找到匹配的工具' : 'No matching tools found';
-                    resultMessage.style.display = 'block';
-                } else {
-                    resultMessage.style.display = 'none';
-                }
+            updateSearchResults(found);
+        }
+        
+        function updateSearchResults(found) {
+            let resultMessage = document.getElementById('search-results');
+            if (!resultMessage) {
+                resultMessage = document.createElement('div');
+                resultMessage.id = 'search-results';
+                document.querySelector('.search-filter-container').after(resultMessage);
+            }
+            
+            if (!found) {
+                resultMessage.textContent = document.documentElement.lang === 'zh' ? 
+                    '没有找到匹配的工具' : 'No matching tools found';
+                resultMessage.style.display = 'block';
+            } else {
+                resultMessage.style.display = 'none';
             }
         }
-
-        document.getElementById('rating-filter').addEventListener('change', function() {
+        
+        function resetDisplay() {
+            // 重置所有卡片显示
+            document.querySelectorAll('.link-card').forEach(card => {
+                card.style.display = 'flex';
+            });
+            
+            // 隐藏搜索结果提示
+            const resultMessage = document.getElementById('search-results');
+            if (resultMessage) {
+                resultMessage.style.display = 'none';
+            }
+        }
+        
+        function filterByRating() {
             const minRating = parseFloat(this.value);
             const cards = document.querySelectorAll('.link-card');
             
             if (this.value === 'all') {
-                cards.forEach(card => {
-                    card.style.display = 'flex';
-                });
+                resetDisplay();
                 return;
             }
             
             cards.forEach(card => {
-                const ratingText = card.querySelector('.rating-score').textContent;
-                const rating = parseFloat(ratingText);
-                
-                if (rating >= minRating) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
+                const ratingElement = card.querySelector('.rating-score');
+                if (ratingElement) {
+                    const rating = parseFloat(ratingElement.textContent);
+                    
+                    if (rating >= minRating) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
                 }
             });
-        });
-
-        // 点击工具链接时增加使用次数
-        document.querySelectorAll('.link-card').forEach(card => {
-            card.addEventListener('click', function() {
-                // 这里可以添加实际的统计逻辑，如发送API请求等
-                console.log('Tool clicked: ' + this.querySelector('.title-text').textContent);
-            });
-        });
-
-        // 显示/隐藏返回顶部按钮
-        window.addEventListener('scroll', function() {
+        }
+        
+        function initBackToTop() {
             const backToTopBtn = document.getElementById('back-to-top');
-            if (window.scrollY > 300) {
-                backToTopBtn.style.display = 'block';
-            } else {
-                backToTopBtn.style.display = 'none';
+            if (backToTopBtn) {
+                // 显示/隐藏返回顶部按钮
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 300) {
+                        backToTopBtn.style.display = 'block';
+                    } else {
+                        backToTopBtn.style.display = 'none';
+                    }
+                });
+                
+                // 点击返回顶部
+                backToTopBtn.addEventListener('click', function() {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
             }
-        });
-
-        // 点击返回顶部
-        document.getElementById('back-to-top').addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+        }
+        
+        function initToolClickTracking() {
+            // 点击工具链接时增加使用次数
+            document.querySelectorAll('.link-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    // 获取工具名称
+                    let titleElement = this.querySelector('.title-text');
+                    if (!titleElement) {
+                        titleElement = this.querySelector('.link-title');
+                    }
+                    const toolName = titleElement ? titleElement.textContent : 'Unknown tool';
+                    
+                    // 这里可以添加实际的统计逻辑，如发送API请求等
+                    console.log('Tool clicked: ' + toolName);
+                    
+                    // 更新使用次数显示（示例）
+                    updateUsageCount();
+                });
             });
-        });
+        }
+        
+        function updateUsageCount() {
+            // 这只是一个示例，实际应用中可能需要从服务器获取真实数据
+            const usageCountElement = document.querySelector('.usage-count');
+            if (usageCountElement) {
+                // 将当前数字转换为整数
+                let currentCount = usageCountElement.textContent;
+                if (currentCount.endsWith('k')) {
+                    currentCount = parseFloat(currentCount) * 1000;
+                } else {
+                    currentCount = parseInt(currentCount);
+                }
+                
+                // 增加计数并格式化
+                currentCount++;
+                let formattedCount = currentCount;
+                if (currentCount >= 1000) {
+                    formattedCount = (currentCount / 1000).toFixed(1) + 'k';
+                }
+                
+                usageCountElement.textContent = formattedCount;
+            }
+        }
     </script>
 </body>
 </html> 
