@@ -1140,6 +1140,9 @@
             
             // 初始化工具点击统计
             initToolClickTracking();
+            
+            // 设置所有外部链接在新标签页打开
+            setupExternalLinks();
         });
 
         function searchTools() {
@@ -1293,6 +1296,37 @@
                 
                 usageCountElement.textContent = formattedCount;
             }
+        }
+        
+        // 新增：设置外部链接在新标签页打开
+        function setupExternalLinks() {
+            // 获取所有工具卡片链接
+            document.querySelectorAll('.link-card').forEach(card => {
+                // 确保链接在新标签页打开
+                if (!card.getAttribute('target')) {
+                    card.setAttribute('target', '_blank');
+                }
+                
+                // 添加rel属性以提高安全性
+                if (!card.getAttribute('rel')) {
+                    card.setAttribute('rel', 'noopener noreferrer');
+                }
+                
+                // 可选：添加返回提示
+                card.addEventListener('click', function() {
+                    // 获取工具名称用于日志
+                    let titleElement = this.querySelector('.title-text');
+                    if (!titleElement) {
+                        titleElement = this.querySelector('.link-title');
+                    }
+                    const toolName = titleElement ? titleElement.textContent : 'Unknown tool';
+                    
+                    console.log(`Opening ${toolName} in new tab`);
+                    
+                    // 更新使用次数
+                    updateUsageCount();
+                });
+            });
         }
     </script>
 </body>
