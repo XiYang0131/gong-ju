@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 工具导航</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6b8cae;
+            --background-color: #f5f7fa;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --hover-color: #e9f0f7;
+            --star-color: #ffc107;
+            --star-inactive: #e0e0e0;
+            --dark-background: #1a1a2e;
+            --dark-card: #16213e;
+            --dark-text: #e6e6e6;
+            --dark-hover: #0f3460;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 20px 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+        }
+
+        /* 搜索和筛选容器 */
+        .search-filter-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .search-container {
+            display: flex;
+            background-color: var(--card-color);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 400px;
+            transition: all 0.3s ease;
+        }
+
+        .search-container:focus-within {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        #search-input {
+            flex-grow: 1;
+            border: none;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            background: transparent;
+            outline: none;
+        }
+
+        #search-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #search-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .filter-container {
+            display: flex;
+            align-items: center;
+            background-color: var(--card-color);
+            border-radius: 30px;
+            padding: 5px 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-label {
+            margin-right: 8px;
+            font-size: 0.95rem;
+            color: var(--secondary-color);
+        }
+
+        #rating-filter {
+            border: none;
+            background: transparent;
+            padding: 8px;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            outline: none;
+            cursor: pointer;
+        }
+
+        #search-results {
+            text-align: center;
+            margin: 20px 0;
+            color: var(--secondary-color);
+            display: none;
+        }
+
+        /* 导航栏样式 */
+        .nav-container {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        .category-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .nav-item {
+            background-color: var(--background-color);
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-2px);
+        }
+
+        .category {
+            margin-bottom: 40px;
+            scroll-margin-top: 100px; /* 为锚点滚动提供顶部边距 */
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .links-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .link-card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            background-color: var(--hover-color);
+        }
+
+        .link-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .title-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .link-description {
+            font-size: 0.9rem;
+            color: #666;
+            flex-grow: 1;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px 0;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* 语言切换按钮样式 */
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .language-btn {
+            background-color: var(--card-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .language-btn:hover, .language-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* 评分系统样式 */
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .star {
+            color: var(--star-color);
+            font-size: 0.9rem;
+        }
+
+        .rating-score {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .rating-count {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        /* 隐藏非当前语言内容 */
+        .lang-en {
+            display: none;
+        }
+
+        /* 使用统计样式 */
+        .usage-stats {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background-color: var(--card-color);
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+            z-index: 1000;
+        }
+
+        .usage-count {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* 返回顶部按钮 */
+        .back-to-top-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 24px;
+            border: none;
+            cursor: pointer;
+            display: none;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-to-top-btn:hover {
+            transform: translateY(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .links-container {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+            
+            .language-switcher {
+                position: relative;
+                top: 0;
+                right: 0;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+            
+            .nav-container {
+                position: relative;
+                top: 0;
+            }
+            
+            .category-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-item {
+                width: 100%;
+                text-align: center;
+            }
+
+            .search-filter-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-container {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .links-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="language-switcher">
+                <button class="language-btn active" onclick="switchLanguage('zh')">中文</button>
+                <button class="language-btn" onclick="switchLanguage('en')">English</button>
+            </div>
+            <h1 class="lang-zh">AI 工具导航</h1>
+            <h1 class="lang-en">AI Tools Navigation</h1>
+            <p class="subtitle lang-zh">精选人工智能工具集合</p>
+            <p class="subtitle lang-en">Curated Collection of AI Tools</p>
+        </header>
+
+        <div class="search-filter-container">
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="搜索 AI 工具..." class="lang-zh">
+                <input type="text" id="search-input" placeholder="Search AI tools..." class="lang-en">
+                <button id="search-button" class="lang-zh">搜索</button>
+                <button id="search-button" class="lang-en">Search</button>
+            </div>
+            
+            <div class="filter-container">
+                <span class="filter-label lang-zh">筛选：</span>
+                <span class="filter-label lang-en">Filter:</span>
+                <select id="rating-filter">
+                    <option value="all" class="lang-zh">所有评分</option>
+                    <option value="all" class="lang-en">All Ratings</option>
+                    <option value="4.5" class="lang-zh">4.5星以上</option>
+                    <option value="4.5" class="lang-en">4.5+ Stars</option>
+                    <option value="4" class="lang-zh">4星以上</option>
+                    <option value="4" class="lang-en">4+ Stars</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="search-results"></div>
+
+        <div class="nav-container">
+            <div class="category-nav">
+                <a href="#major-models" class="nav-item lang-zh">主流大型模型</a>
+                <a href="#major-models" class="nav-item lang-en">Major AI Models</a>
+                <a href="#chinese-models" class="nav-item lang-zh">中文优化模型</a>
+                <a href="#chinese-models" class="nav-item lang-en">Chinese Models</a>
+                <a href="#search-ai" class="nav-item lang-zh">搜索增强AI</a>
+                <a href="#search-ai" class="nav-item lang-en">Search AI</a>
+                <a href="#content-tools" class="nav-item lang-zh">内容创作</a>
+                <a href="#content-tools" class="nav-item lang-en">Content Creation</a>
+                <a href="#specialized-tools" class="nav-item lang-zh">专业工具</a>
+                <a href="#specialized-tools" class="nav-item lang-en">Specialized Tools</a>
+                <a href="#ai-detection" class="nav-item lang-zh">AI检测</a>
+                <a href="#ai-detection" class="nav-item lang-en">AI Detection</a>
+                <a href="#multimedia" class="nav-item lang-zh">多媒体创作</a>
+                <a href="#multimedia" class="nav-item lang-en">Multimedia</a>
+                <a href="#ai-platforms" class="nav-item lang-zh">AI平台</a>
+                <a href="#ai-platforms" class="nav-item lang-en">AI Platforms</a>
+                <a href="#education" class="nav-item lang-zh">教育工具</a>
+                <a href="#education" class="nav-item lang-en">Education</a>
+                <a href="#productivity" class="nav-item lang-zh">生产力</a>
+                <a href="#productivity" class="nav-item lang-en">Productivity</a>
+                <a href="#community" class="nav-item lang-zh">社区</a>
+                <a href="#community" class="nav-item lang-en">Community</a>
+            </div>
+        </div>
+
+        <main>
+            <section id="major-models" class="category">
+                <h2 class="category-title lang-zh">主流大型模型</h2>
+                <h2 class="category-title lang-en">Major AI Models</h2>
+                <div class="links-container">
+                    <a href="https://chatgpt.com/" class="link-card">
+                        <div class="link-title">
+                            <div class="title-text">ChatGPT</div>
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-score">4.8</span>
+                                <span class="rating-count">(5.2k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">OpenAI 开发的对话式 AI 模型，能够理解和生成自然语言，回答问题，提供创意写作，代码生成等多种功能，是目前最流行的通用型 AI 助手之一</div>
+                        <div class="link-description lang-en">Conversational AI model by OpenAI capable of understanding and generating natural language, answering questions, creative writing, and code generation</div>
+                    </a>
+                    <a href="https://gemini.google.com/" class="link-card">
+                        <div class="link-title">
+                            Gemini
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.5</span>
+                                <span class="rating-count">(3.7k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">Google 的多模态 AI 模型，支持文本、图像等多种输入，具有强大的推理能力和知识库，能够处理复杂任务，提供深度分析和创意内容生成</div>
+                        <div class="link-description lang-en">Google's multimodal AI model supporting text, image and other inputs with powerful reasoning capabilities and knowledge base for complex tasks</div>
+                    </a>
+                    <a href="https://grok.com/" class="link-card">
+                        <div class="link-title">
+                            Grok
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.2</span>
+                                <span class="rating-count">(1.8k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">xAI 开发的对话式 AI，具有幽默感和实时网络访问能力，能够提供最新信息和独特见解，风格更加活泼，适合寻求非传统 AI 互动体验的用户</div>
+                        <div class="link-description lang-en">Conversational AI by xAI with humor and real-time web access, providing up-to-date information and unique insights with a more playful style</div>
+                    </a>
+                    <a href="https://www.deepseek.com/" class="link-card">
+                        <div class="link-title">
+                            DeepSeek
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.3</span>
+                                <span class="rating-count">(1.2k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">专注于深度学习的 AI 平台，提供强大的语言理解能力，特别擅长科学研究、技术分析和专业领域问题解答，支持复杂推理和专业知识检索</div>
+                        <div class="link-description lang-en">AI platform focused on deep learning with powerful language understanding capabilities, excelling in scientific research, technical analysis and professional domain problem-solving</div>
+                    </a>
+                    <a href="https://huggingface.co/" class="link-card">
+                        <div class="link-title">
+                            Hugging Face
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-score">4.9</span>
+                                <span class="rating-count">(4.8k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 社区和模型中心，提供数以万计的开源 AI 模型和数据集，支持模型部署、微调和共享，是 AI 研究者和开发者的重要平台，提供完整的 AI 开发工具链</div>
+                        <div class="link-description lang-en">AI community and model hub offering thousands of open-source AI models and datasets, supporting model deployment, fine-tuning and sharing, serving as a crucial platform for AI researchers and developers</div>
+                    </a>
+                </div>
+            </section>
+
+            <section id="chinese-models" class="category">
+                <h2 class="category-title lang-zh">中文优化模型</h2>
+                <h2 class="category-title lang-en">Chinese-Optimized Models</h2>
+                <div class="links-container">
+                    <a href="https://kimi.moonshot.cn/" class="link-card">
+                        <div class="link-title">
+                            Kimi
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-score">4.5</span>
+                                <span class="rating-count">(1.3k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">月之暗面开发的中文大模型，针对中文场景优化，具有出色的中文理解和生成能力，支持多种文档格式和长文本处理，提供知识检索和实时网络搜索功能，为中文用户提供本地化的 AI 体验</div>
+                        <div class="link-description lang-en">Chinese LLM by Moonshot AI, optimized for Chinese language with excellent Chinese understanding and generation capabilities, supporting various document formats and long-text processing with knowledge retrieval</div>
+                    </a>
+                    <a href="https://metaso.cn/" class="link-card">
+                        <div class="link-title">
+                            MetaSO
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.2</span>
+                                <span class="rating-count">(876)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">中文搜索引擎与 AI 助手结合的平台，提供实时信息检索和智能问答服务，专注于中文内容的深度理解和分析，支持多种中文资源整合和知识提取，为中文用户提供更精准的搜索和信息获取体验</div>
+                        <div class="link-description lang-en">Platform combining Chinese search engine with AI assistant, providing real-time information retrieval and intelligent Q&A services with focus on deep understanding of Chinese content and resource integration</div>
+                    </a>
+                </div>
+            </section>
+
+            <section id="search-ai" class="category">
+                <h2 class="category-title lang-zh">搜索增强 AI</h2>
+                <h2 class="category-title lang-en">Search-Enhanced AI</h2>
+                <div class="links-container">
+                    <a href="https://www.perplexity.ai/" class="link-card">
+                        <div class="link-title">
+                            Perplexity
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-score">4.6</span>
+                                <span class="rating-count">(1.5k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">结合搜索引擎与 AI 的问答平台，提供实时信息检索和深度分析，能够引用可靠来源，生成有据可查的回答，支持学术研究、新闻追踪和深度调研，是获取可信信息的理想工具</div>
+                        <div class="link-description lang-en">Q&A platform combining search engine with AI, providing real-time information retrieval and in-depth analysis, citing reliable sources for verifiable answers, supporting academic research and news tracking</div>
+                    </a>
+                </div>
+            </section>
+
+            <section id="content-tools" class="category">
+                <h2 class="category-title lang-zh">内容创作工具</h2>
+                <h2 class="category-title lang-en">Content Creation</h2>
+                <div class="links-container">
+                    <a href="https://zeemo.ai/" class="link-card">
+                        <div class="link-title">
+                            Zeemo
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.0</span>
+                                <span class="rating-count">(512)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 创意与内容生成工具，专注于帮助创作者生成独特的文案、故事和创意内容，提供多种风格和格式选择，适合营销人员、作家和内容创作者提升创作效率和突破创意瓶颈</div>
+                        <div class="link-description lang-en">AI creative and content generation tool focused on helping creators produce unique copy, stories and creative content with various style options, ideal for marketers, writers and content creators</div>
+                    </a>
+                    <a href="https://quillbot.com/" class="link-card">
+                        <div class="link-title">
+                            QuillBot
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.5</span>
+                                <span class="rating-count">(2.1k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 驱动的写作和改写工具，提供高质量的释义、语法检查、摘要生成和内容优化功能，支持多种写作风格调整，帮助用户提升写作质量，特别适合学生、研究人员和专业写作者</div>
+                        <div class="link-description lang-en">AI-powered writing and paraphrasing tool offering high-quality paraphrasing, grammar checking, summarization and content optimization with multiple writing style adjustments for students and professionals</div>
+                    </a>
+                    <a href="https://gamma.app/" class="link-card">
+                        <div class="link-title">
+                            Gamma
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.3</span>
+                                <span class="rating-count">(876)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 驱动的演示文稿和文档创建平台，能够根据简单提示自动生成精美的演示文稿，包含专业设计和视觉效果，支持实时协作和多种导出格式，大幅简化演示文稿制作流程</div>
+                        <div class="link-description lang-en">AI-powered presentation and document creation platform that automatically generates beautiful presentations from simple prompts, featuring professional design and visual effects with real-time collaboration</div>
+                    </a>
+                    <a href="https://cherry-ai.com/" class="link-card">
+                        <div class="link-title">
+                            Cherry AI
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">3.8</span>
+                                <span class="rating-count">(423)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">专注于内容创作的 AI 助手，提供文章生成、内容优化和创意建议，特别适合博客作者、营销人员和内容团队，能够根据目标受众和品牌风格定制内容，提高内容创作效率</div>
+                        <div class="link-description lang-en">AI assistant focused on content creation, offering article generation, content optimization and creative suggestions for bloggers, marketers and content teams, customizing content based on target audience</div>
+                    </a>
+                </div>
+            </section>
+
+            <section id="specialized-tools" class="category">
+                <h2 class="category-title lang-zh">专业工具</h2>
+                <h2 class="category-title lang-en">Specialized Tools</h2>
+                <div class="links-container">
+                    <a href="https://lovable.dev/" class="link-card">
+                        <div class="link-title">
+                            Lovable
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.2</span>
+                                <span class="rating-count">(356)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">专为开发者设计的 AI 编程助手，提供代码生成、调试、优化和解释功能，支持多种编程语言和框架，能够理解复杂的开发需求，加速软件开发流程，提高代码质量</div>
+                        <div class="link-description lang-en">AI programming assistant designed for developers, providing code generation, debugging, optimization and explanation for multiple programming languages and frameworks, accelerating software development</div>
+                    </a>
+                    <a href="https://chatboxai.app/" class="link-card">
+                        <div class="link-title">
+                            ChatBox
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.1</span>
+                                <span class="rating-count">(789)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">跨平台 AI 聊天应用，支持多种大型语言模型接入，提供统一的用户界面，允许用户在不同 AI 模型间切换，保存对话历史，支持自定义提示词和个性化设置，适合 AI 爱好者和专业用户</div>
+                        <div class="link-description lang-en">Cross-platform AI chat application supporting multiple large language models with a unified interface, allowing users to switch between different AI models, save conversation history and customize settings</div>
+                    </a>
+                    <a href="https://replit.com/" class="link-card">
+                        <div class="link-title">
+                            Replit
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-score">4.7</span>
+                                <span class="rating-count">(3.2k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">基于浏览器的协作式编程平台，集成了 AI 编程助手，支持 50 多种编程语言，提供实时协作、版本控制和即时部署功能，适合教育、团队协作和快速原型开发</div>
+                        <div class="link-description lang-en">Browser-based collaborative programming platform with integrated AI coding assistant, supporting over 50 programming languages with real-time collaboration, version control and instant deployment</div>
+                    </a>
+                </div>
+            </section>
+
+            <section id="ai-detection" class="category">
+                <h2 class="category-title lang-zh">AI 检测与分析</h2>
+                <h2 class="category-title lang-en">AI Detection & Analysis</h2>
+                <div class="links-container">
+                    <a href="https://www.zerogpt.com/" class="link-card">
+                        <div class="link-title">
+                            ZeroGPT
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.1</span>
+                                <span class="rating-count">(1.2k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 内容检测工具，能够分析文本是否由 AI 生成，提供详细的 AI 概率评分和分析报告，帮助教育机构、出版商和内容平台识别 AI 生成内容，确保内容真实性和原创性</div>
+                        <div class="link-description lang-en">AI content detection tool analyzing whether text is AI-generated, providing detailed AI probability scores and analysis reports to help educational institutions and publishers verify content authenticity</div>
+                    </a>
+                    <a href="https://theyseeyourphotos.com/" class="link-card">
+                        <div class="link-title">
+                            They See Your Photos
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.0</span>
+                                <span class="rating-count">(687)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">图像隐私分析工具，检测照片中可能包含的敏感信息和元数据，评估 AI 模型从图像中可提取的个人信息，提高用户对图像隐私的意识，帮助保护个人数据安全</div>
+                        <div class="link-description lang-en">Image privacy analysis tool detecting sensitive information and metadata in photos, assessing what personal information AI models can extract from images to raise awareness about image privacy</div>
+                    </a>
+                    <a href="https://gptzero.me/" class="link-card">
+                        <div class="link-title">
+                            GPTZero
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.2</span>
+                                <span class="rating-count">(1.1k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 内容检测工具，能够分析文本是否由 AI 生成，提供详细的 AI 概率评分和分析报告，帮助教育机构、出版商和内容平台识别 AI 生成内容，确保内容真实性和原创性</div>
+                        <div class="link-description lang-en">AI content detection tool analyzing whether text is AI-generated, providing detailed AI probability scores and analysis reports to help educational institutions and publishers verify content authenticity</div>
+                    </a>
+                    <a href="https://undetectable.ai/" class="link-card">
+                        <div class="link-title">
+                            Undetectable.AI
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-score">4.6</span>
+                                <span class="rating-count">(1.8k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 文本人性化工具，能将 AI 生成的内容转换为更自然的人类风格文本，避免被 AI 检测工具识别，保持内容原意的同时增加表达的多样性和自然度，适合需要高质量人性化内容的场景</div>
+                        <div class="link-description lang-en">AI text humanization tool converting AI-generated content into more natural human-style text that can bypass AI detection tools while maintaining original meaning with increased expression diversity</div>
+                    </a>
+                </div>
+            </section>
+
+            <section id="multimedia" class="category">
+                <h2 class="category-title lang-zh">多媒体创作</h2>
+                <h2 class="category-title lang-en">Multimedia</h2>
+                <div class="links-container">
+                    <a href="https://www.riffusion.com/" class="link-card">
+                        <div class="link-title">
+                            Riffusion
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.2</span>
+                                <span class="rating-count">(756)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">基于 AI 的音乐生成工具，通过文本提示创建独特的音乐片段和旋律，将稳定扩散模型应用于声谱图生成，让用户无需音乐专业知识也能创作音乐，支持多种音乐风格和情感表达</div>
+                        <div class="link-description lang-en">AI-based music generation tool creating unique musical clips and melodies from text prompts, applying stable diffusion models to spectrogram generation, allowing users to create music without musical expertise</div>
+                    </a>
+                    <a href="https://www.vidu.com/" class="link-card">
+                        <div class="link-title">
+                            Vidu
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.0</span>
+                                <span class="rating-count">(623)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 视频创作平台，能够从文本描述生成高质量视频内容，支持自定义场景、角色和风格，简化视频制作流程，适合营销人员、内容创作者和社交媒体管理者快速生成专业视频</div>
+                        <div class="link-description lang-en">AI video creation platform generating high-quality video content from text descriptions, supporting customized scenes, characters and styles, simplifying video production for marketers and content creators</div>
+                    </a>
+                    <a href="https://www.chichi-pui.com/" class="link-card">
+                        <div class="link-title">
+                            ChiChi Pui
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">3.8</span>
+                                <span class="rating-count">(412)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 驱动的图像生成和编辑工具，专注于艺术风格和创意表达，提供多种滤镜和风格转换选项，支持个性化定制和批量处理，帮助设计师和创意专业人士实现独特的视觉效果</div>
+                        <div class="link-description lang-en">AI-driven image generation and editing tool focused on artistic styles and creative expression, offering various filters and style transfer options with personalized customization for designers</div>
+                    </a>
+                    <a href="https://pixai.art/" class="link-card">
+                        <div class="link-title">
+                            PixAI
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-score">4.7</span>
+                                <span class="rating-count">(2.3k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 艺术创作社区平台，结合了强大的图像生成技术和社交功能，用户可以通过文本提示创建精美插画和艺术作品，支持风格混合、模型微调和社区分享，为艺术家和设计师提供灵感和创作工具</div>
+                        <div class="link-description lang-en">AI art creation community platform combining powerful image generation technology with social features, allowing users to create beautiful illustrations and artwork through text prompts with style mixing and community sharing</div>
+                    </a>
+                    <a href="https://leonardo.ai/" class="link-card">
+                        <div class="link-title">
+                            Leonardo.AI
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-score">4.8</span>
+                                <span class="rating-count">(3.2k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">专业级 AI 图像生成平台，提供高度可定制的创意工具，支持创建游戏资产、概念艺术和商业插图，具有先进的风格控制、批量生成和模型训练功能，为设计师、游戏开发者和创意团队提供高质量视觉内容创作解决方案</div>
+                        <div class="link-description lang-en">Professional AI image generation platform offering highly customizable creative tools for creating game assets, concept art and commercial illustrations with advanced style control, batch generation and model training capabilities</div>
+                    </a>
+                </div>
+            </section>
+
+            <section id="ai-platforms" class="category">
+                <h2 class="category-title lang-zh">AI 开发平台</h2>
+                <h2 class="category-title lang-en">AI Platforms</h2>
+                <div class="links-container">
+                    <a href="https://openrouter.ai/" class="link-card">
+                        <div class="link-title">
+                            OpenRouter
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.3</span>
+                                <span class="rating-count">(578)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">统一的 AI 模型接口平台，允许开发者通过单一 API 访问多种大型语言模型，简化了多模型集成过程，支持按需付费和灵活切换模型，适合需要在不同 AI 模型间比较和选择的应用场景</div>
+                        <div class="link-description lang-en">Unified AI model interface platform allowing developers to access multiple large language models through a single API, simplifying multi-model integration with pay-as-you-go pricing and flexible model switching</div>
+                    </a>
+                    <a href="https://dify.ai/" class="link-card">
+                        <div class="link-title">
+                            Dify.AI
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.4</span>
+                                <span class="rating-count">(692)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">开源 LLMOps 平台，提供可视化界面构建 AI 应用，支持向量数据库集成、提示词管理、应用监控和多模型接入，让非技术人员也能快速创建和部署 AI 应用，适合企业和开发团队快速实现 AI 产品化</div>
+                        <div class="link-description lang-en">Open-source LLMOps platform offering visual interface for building AI applications, supporting vector database integration, prompt management, application monitoring and multi-model access for rapid AI application development</div>
+                    </a>
+                </div>
+            </section>
+
+            <section id="education" class="category">
+                <h2 class="category-title lang-zh">教育工具</h2>
+                <h2 class="category-title lang-en">Education</h2>
+                <div class="links-container">
+                    <a href="https://www.coursehero.com/dashboard/" class="link-card">
+                        <div class="link-title">
+                            Course Hero
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.3</span>
+                                <span class="rating-count">(3.5k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">在线学习平台，结合 AI 辅助功能帮助学生解决学习难题，提供课程资料、习题解答和学习指导，支持多学科内容，包括文档库、AI 解题工具和个性化学习计划，帮助学生提高学习效率和理解能力</div>
+                        <div class="link-description lang-en">Online learning platform with AI-assisted features helping students solve academic challenges, offering course materials, problem solutions and study guides across multiple disciplines with personalized learning plans</div>
+                    </a>
+                </div>
+            </section>
+
+            <section id="productivity" class="category">
+                <h2 class="category-title lang-zh">生产力工具</h2>
+                <h2 class="category-title lang-en">Productivity</h2>
+                <div class="links-container">
+                    <a href="https://www.maxai.co/" class="link-card">
+                        <div class="link-title">
+                            MaxAI
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.3</span>
+                                <span class="rating-count">(876)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">全能型 AI 助手，专注于提升工作效率，提供邮件撰写、会议总结、文档分析和任务管理等功能，支持多平台集成，能够与常用办公软件无缝协作，帮助专业人士节省时间并提高工作质量</div>
+                        <div class="link-description lang-en">All-in-one AI assistant focused on productivity enhancement, offering email writing, meeting summarization, document analysis and task management features with multi-platform integration for professionals</div>
+                    </a>
+                    <a href="https://readtheory.org/" class="link-card">
+                        <div class="link-title">
+                            ReadTheory
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-score">4.7</span>
+                                <span class="rating-count">(2.1k)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 驱动的阅读理解平台，通过自适应学习技术提供个性化阅读练习，根据用户水平自动调整难度，提供即时反馈和详细分析，帮助学生和专业人士提高阅读理解能力和批判性思维</div>
+                        <div class="link-description lang-en">AI-powered reading comprehension platform providing personalized reading exercises through adaptive learning technology, automatically adjusting difficulty based on user level with instant feedback and analysis</div>
+                    </a>
+                </div>
+            </section>
+
+            <section id="community" class="category">
+                <h2 class="category-title lang-zh">社区与分享</h2>
+                <h2 class="category-title lang-en">Community</h2>
+                <div class="links-container">
+                    <a href="https://promptchan.com/" class="link-card">
+                        <div class="link-title">
+                            PromptChan
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score">4.4</span>
+                                <span class="rating-count">(532)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 提示词分享社区，用户可以发现、分享和讨论各种 AI 模型的高效提示词，包括文本、图像和音频生成提示，提供评分系统和分类浏览，帮助创作者找到最适合特定任务的提示词模板</div>
+                        <div class="link-description lang-en">AI prompt sharing community where users can discover, share and discuss effective prompts for various AI models, including text, image and audio generation prompts with rating system and categorized browsing</div>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p class="lang-zh">© 2024 AI 工具导航 | 精选人工智能工具集合</p>
+            <p class="lang-en">© 2024 AI Tools Navigation | Curated Collection of AI Tools</p>
+        </footer>
+    </div>
+
+    <div class="usage-stats">
+        <span class="lang-zh">使用次数：</span>
+        <span class="lang-en">Usage count: </span>
+        <span class="usage-count">1.2k</span>
+    </div>
+
+    <button id="back-to-top" class="back-to-top-btn">↑</button>
+
+    <script>
+        function switchLanguage(lang) {
+            // 隐藏所有语言内容
+            document.querySelectorAll('.lang-zh, .lang-en').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // 显示选定语言内容
+            document.querySelectorAll(`.lang-${lang}`).forEach(el => {
+                el.style.display = 'block';
+            });
+            
+            // 更新按钮状态
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.language-btn[onclick="switchLanguage('${lang}')"]`).classList.add('active');
+            
+            // 更新 HTML 语言属性
+            document.documentElement.lang = lang;
+        }
+        
+        // 平滑滚动到锚点
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // 初始化显示中文
+        switchLanguage('zh');
+
+        document.getElementById('search-button').addEventListener('click', searchTools);
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchTools();
+            }
+        });
+
+        function searchTools() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const cards = document.querySelectorAll('.link-card');
+            let found = false;
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.title-text').textContent.toLowerCase();
+                const description = card.querySelector('.link-description:not([style*="display: none"])').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                    found = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // 显示搜索结果提示
+            const resultMessage = document.getElementById('search-results');
+            if (resultMessage) {
+                if (!found) {
+                    resultMessage.textContent = document.documentElement.lang === 'zh' ? 
+                        '没有找到匹配的工具' : 'No matching tools found';
+                    resultMessage.style.display = 'block';
+                } else {
+                    resultMessage.style.display = 'none';
+                }
+            }
+        }
+
+        document.getElementById('rating-filter').addEventListener('change', function() {
+            const minRating = parseFloat(this.value);
+            const cards = document.querySelectorAll('.link-card');
+            
+            if (this.value === 'all') {
+                cards.forEach(card => {
+                    card.style.display = 'flex';
+                });
+                return;
+            }
+            
+            cards.forEach(card => {
+                const ratingText = card.querySelector('.rating-score').textContent;
+                const rating = parseFloat(ratingText);
+                
+                if (rating >= minRating) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // 点击工具链接时增加使用次数
+        document.querySelectorAll('.link-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // 这里可以添加实际的统计逻辑，如发送API请求等
+                console.log('Tool clicked: ' + this.querySelector('.title-text').textContent);
+            });
+        });
+
+        // 显示/隐藏返回顶部按钮
+        window.addEventListener('scroll', function() {
+            const backToTopBtn = document.getElementById('back-to-top');
+            if (window.scrollY > 300) {
+                backToTopBtn.style.display = 'block';
+            } else {
+                backToTopBtn.style.display = 'none';
+            }
+        });
+
+        // 点击返回顶部
+        document.getElementById('back-to-top').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html> 
