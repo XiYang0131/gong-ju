@@ -380,6 +380,25 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* 添加到现有样式表中 - 语言特定评分显示 */
+        .rating-score.lang-zh, .rating-count.lang-zh {
+            display: none;
+        }
+        
+        .rating-score.lang-en, .rating-count.lang-en {
+            display: none;
+        }
+        
+        html[lang="zh-CN"] .rating-score.lang-zh, 
+        html[lang="zh-CN"] .rating-count.lang-zh {
+            display: inline;
+        }
+        
+        html[lang="en"] .rating-score.lang-en, 
+        html[lang="en"] .rating-count.lang-en {
+            display: inline;
+        }
     </style>
 </head>
 <body>
@@ -453,9 +472,9 @@
                 <h2 class="category-title lang-zh">主流大型模型</h2>
                 <h2 class="category-title lang-en">Major AI Models</h2>
                 <div class="links-container">
-                    <a href="https://chatgpt.com/" class="link-card">
+                    <a href="https://chat.openai.com/" class="link-card">
                         <div class="link-title">
-                            <div class="title-text">ChatGPT</div>
+                            ChatGPT
                             <div class="rating">
                                 <div class="stars">
                                     <span class="star">★</span>
@@ -464,8 +483,10 @@
                                     <span class="star">★</span>
                                     <span class="star">★</span>
                                 </div>
-                                <span class="rating-score">4.8</span>
-                                <span class="rating-count">(5.2k)</span>
+                                <span class="rating-score lang-zh">4.8</span>
+                                <span class="rating-count lang-zh">(5.2k)</span>
+                                <span class="rating-score lang-en">4.8</span>
+                                <span class="rating-count lang-en">(5.2K)</span>
                             </div>
                         </div>
                         <div class="link-description lang-zh">OpenAI 开发的对话式 AI 模型，能够理解和生成自然语言，回答问题，提供创意写作，代码生成等多种功能，是目前最流行的通用型 AI 助手之一</div>
@@ -482,8 +503,10 @@
                                     <span class="star">★</span>
                                     <span class="star" style="color: var(--star-inactive)">★</span>
                                 </div>
-                                <span class="rating-score">4.5</span>
-                                <span class="rating-count">(3.7k)</span>
+                                <span class="rating-score lang-zh">4.5</span>
+                                <span class="rating-count lang-zh">(3.7k)</span>
+                                <span class="rating-score lang-en">4.5</span>
+                                <span class="rating-count lang-en">(3.7K)</span>
                             </div>
                         </div>
                         <div class="link-description lang-zh">Google 的多模态 AI 模型，支持文本、图像等多种输入，具有强大的推理能力和知识库，能够处理复杂任务，提供深度分析和创意内容生成</div>
@@ -820,6 +843,47 @@
                         <div class="link-description lang-zh">AI 写作助手，专注于长篇内容创作和编辑，提供智能大纲生成、内容扩展和风格调整功能，支持多种写作类型，包括博客、文章和营销文案，帮助作者克服写作障碍并提高内容质量</div>
                         <div class="link-description lang-en">AI writing assistant focused on long-form content creation and editing, offering intelligent outline generation, content expansion and style adjustment features for various writing types including blogs and marketing copy</div>
                     </a>
+                    <a href="https://phrasly.ai/" class="link-card">
+                        <div class="link-title">
+                            Phrasly
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score lang-zh">4.4</span>
+                                <span class="rating-count lang-zh">(956)</span>
+                                <span class="rating-score lang-en">4.4</span>
+                                <span class="rating-count lang-en">(956)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 写作润色工具，专注于改进文本表达和语法，提供多种语言风格选项，能够保持原文意图的同时提升文本质量，适用于商务邮件、学术论文和创意写作等多种场景</div>
+                        <div class="link-description lang-en">AI writing enhancement tool focused on improving text expression and grammar with various language style options, maintaining original intent while elevating text quality for business emails and academic papers</div>
+                    </a>
+                    
+                    <a href="https://glasp.co/" class="link-card">
+                        <div class="link-title">
+                            Glasp
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score lang-zh">4.5</span>
+                                <span class="rating-count lang-zh">(1.1k)</span>
+                                <span class="rating-score lang-en">4.5</span>
+                                <span class="rating-count lang-en">(1.1K)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 增强的社交化网页标注工具，允许用户高亮和收集网页内容，自动提取关键见解，支持笔记整理和知识分享，帮助研究者和学习者更有效地管理和分享在线信息</div>
+                        <div class="link-description lang-en">AI-enhanced social web highlighting tool allowing users to highlight and collect web content with automatic key insight extraction, supporting note organization and knowledge sharing</div>
+                    </a>
                 </div>
             </section>
 
@@ -1026,6 +1090,89 @@
                         </div>
                         <div class="link-description lang-zh">AI 文本人性化工具，专门将机器生成的内容转换为自然流畅的人类风格文本，提供多种语气和风格选项，有效避开 AI 检测工具，保持原意的同时增加表达多样性，适合内容创作者和学术写作</div>
                         <div class="link-description lang-en">AI text humanization tool that converts machine-generated content into natural, fluent human-style text with various tone and style options, effectively bypassing AI detection tools while maintaining original meaning</div>
+                    </a>
+                    <a href="https://codeassist.google/" class="link-card">
+                        <div class="link-title">
+                            Google CodeAssist
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-score lang-zh">4.9</span>
+                                <span class="rating-count lang-zh">(2.8k)</span>
+                                <span class="rating-score lang-en">4.9</span>
+                                <span class="rating-count lang-en">(2.8K)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">谷歌开发的 AI 编程助手，提供代码补全、错误检测和智能重构功能，支持多种编程语言，能够理解代码上下文并提供相关建议，帮助开发者提高编码效率和代码质量</div>
+                        <div class="link-description lang-en">Google's AI programming assistant offering code completion, error detection and intelligent refactoring across multiple programming languages, understanding code context to provide relevant suggestions</div>
+                    </a>
+                    
+                    <a href="https://tavily.com/" class="link-card">
+                        <div class="link-title">
+                            Tavily
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score lang-zh">4.5</span>
+                                <span class="rating-count lang-zh">(1.2k)</span>
+                                <span class="rating-score lang-en">4.5</span>
+                                <span class="rating-count lang-en">(1.2K)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 驱动的研究助手和搜索 API，专为开发者和研究人员设计，提供高质量信息检索和数据分析功能，支持深度网络搜索和结构化数据提取，可轻松集成到各类应用中</div>
+                        <div class="link-description lang-en">AI-driven research assistant and search API designed for developers and researchers, providing high-quality information retrieval and data analysis with deep web search capabilities</div>
+                    </a>
+                    
+                    <a href="https://www.interviewcoder.co/" class="link-card">
+                        <div class="link-title">
+                            InterviewCoder
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-score lang-zh">4.8</span>
+                                <span class="rating-count lang-zh">(1.5k)</span>
+                                <span class="rating-score lang-en">4.8</span>
+                                <span class="rating-count lang-en">(1.5K)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 驱动的编程面试准备平台，提供针对性的技术面试问题和实时代码评估，模拟真实面试环境，支持多种编程语言和算法挑战，帮助开发者提升面试技巧和编程能力</div>
+                        <div class="link-description lang-en">AI-driven programming interview preparation platform offering targeted technical interview questions and real-time code assessment, simulating real interview environments for various programming languages</div>
+                    </a>
+                    
+                    <a href="https://monica.im/" class="link-card">
+                        <div class="link-title">
+                            Monica
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score lang-zh">4.6</span>
+                                <span class="rating-count lang-zh">(1.3k)</span>
+                                <span class="rating-score lang-en">4.6</span>
+                                <span class="rating-count lang-en">(1.3K)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 个人助理应用，提供日程管理、会议总结和智能提醒功能，能够理解上下文并提供个性化建议，支持多平台集成，帮助用户高效管理时间和任务，提升工作生活平衡</div>
+                        <div class="link-description lang-en">AI personal assistant application providing schedule management, meeting summaries and smart reminders with contextual understanding and personalized suggestions across multiple platforms</div>
                     </a>
                 </div>
             </section>
@@ -1521,6 +1668,110 @@
                         </div>
                         <div class="link-description lang-zh">AI 3D 模型生成平台，通过文本描述或参考图像创建高质量 3D 模型，提供直观的编辑工具和材质库，支持多种导出格式，适用于游戏开发、产品设计、建筑可视化和虚拟现实内容创作</div>
                         <div class="link-description lang-en">AI 3D model generation platform creating high-quality 3D models from text descriptions or reference images with intuitive editing tools and material libraries for game development and product design</div>
+                    </a>
+                    <a href="https://www.aippt.com/" class="link-card">
+                        <div class="link-title">
+                            AIPPT
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-score lang-zh">4.7</span>
+                                <span class="rating-count lang-zh">(1.5k)</span>
+                                <span class="rating-score lang-en">4.7</span>
+                                <span class="rating-count lang-en">(1.5K)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 驱动的 PowerPoint 演示文稿生成工具，能从文本提示或文档自动创建专业级幻灯片，提供智能设计建议、内容组织和视觉元素优化，支持多种模板和品牌定制</div>
+                        <div class="link-description lang-en">AI-driven PowerPoint presentation generation tool that automatically creates professional-grade slides from text prompts or documents with intelligent design suggestions and visual element optimization</div>
+                    </a>
+                    
+                    <a href="https://www.sunodownloader.io/" class="link-card">
+                        <div class="link-title">
+                            SunoDownloader
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score lang-zh">4.3</span>
+                                <span class="rating-count lang-zh">(876)</span>
+                                <span class="rating-score lang-en">4.3</span>
+                                <span class="rating-count lang-en">(876)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 视频和音频下载工具，支持从多个平台提取媒体内容，提供格式转换和质量增强功能，能够智能识别和提取视频中的音频轨道，适用于内容创作者和媒体收集者</div>
+                        <div class="link-description lang-en">AI video and audio download tool supporting media content extraction from multiple platforms with format conversion and quality enhancement features, intelligently identifying and extracting audio tracks</div>
+                    </a>
+                    
+                    <a href="https://aimusicgen.ai/" class="link-card">
+                        <div class="link-title">
+                            AIMusicGen
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-score lang-zh">4.8</span>
+                                <span class="rating-count lang-zh">(2.1k)</span>
+                                <span class="rating-score lang-en">4.8</span>
+                                <span class="rating-count lang-en">(2.1K)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 音乐生成平台，通过文本描述或风格参考创作原创音乐，支持多种音乐风格和乐器组合，提供编辑和混音功能，让用户无需专业音乐知识即可创作高质量音乐作品</div>
+                        <div class="link-description lang-en">AI music generation platform creating original music through text descriptions or style references, supporting various music styles and instrument combinations with editing and mixing capabilities</div>
+                    </a>
+                    
+                    <a href="https://aifaceswapper.io/" class="link-card">
+                        <div class="link-title">
+                            AIFaceSwapper
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score lang-zh">4.4</span>
+                                <span class="rating-count lang-zh">(2.3k)</span>
+                                <span class="rating-score lang-en">4.4</span>
+                                <span class="rating-count lang-en">(2.3K)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 人脸替换工具，能够在图片和视频中精确替换面部，保持表情和光照一致性，提供自然逼真的效果，支持批量处理和高清输出，适用于创意内容制作和娱乐应用</div>
+                        <div class="link-description lang-en">AI face replacement tool capable of precisely swapping faces in images and videos while maintaining expression and lighting consistency with natural, realistic results</div>
+                    </a>
+                    
+                    <a href="https://airbrush.com/" class="link-card">
+                        <div class="link-title">
+                            Airbrush
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                                <span class="rating-score lang-zh">4.9</span>
+                                <span class="rating-count lang-zh">(3.2k)</span>
+                                <span class="rating-score lang-en">4.9</span>
+                                <span class="rating-count lang-en">(3.2K)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 图像编辑平台，提供智能修饰、背景移除和创意增强功能，使用先进的生成式 AI 技术，支持一键美化和专业级调整，适合电商产品图、社交媒体内容和设计项目</div>
+                        <div class="link-description lang-en">AI image editing platform offering intelligent retouching, background removal and creative enhancement using advanced generative AI technology with one-click beautification and professional adjustments</div>
                     </a>
                 </div>
             </section>
@@ -2052,6 +2303,47 @@
                         <div class="link-description lang-zh">AI 恋爱模拟平台，提供虚拟伴侣和情感互动体验，通过自然语言对话和情感分析技术创造真实的关系互动，支持个性化角色定制和情感成长系统，为用户提供安全、私密的情感交流空间</div>
                         <div class="link-description lang-en">AI romance simulation platform providing virtual companions and emotional interaction experiences through natural language dialogue and emotion analysis technology with personalized character customization</div>
                     </a>
+                    <a href="https://eroplay.ai/" class="link-card">
+                        <div class="link-title">
+                            <div class="title-text">EroPlay</div>
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score lang-zh">4.5</span>
+                                <span class="rating-count lang-zh">(1.7k)</span>
+                                <span class="rating-score lang-en">4.5</span>
+                                <span class="rating-count lang-en">(1.7K)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 驱动的互动故事和角色扮演平台，提供沉浸式叙事体验，用户可以创建自定义角色和情境，系统会根据用户选择动态生成故事情节，支持多种主题和类型的互动内容</div>
+                        <div class="link-description lang-en">AI-driven interactive storytelling and role-playing platform offering immersive narrative experiences where users can create custom characters and scenarios with dynamically generated storylines</div>
+                    </a>
+                    
+                    <a href="https://www.juicychat.ai/" class="link-card">
+                        <div class="link-title">
+                            JuicyChat
+                            <div class="rating">
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star" style="color: var(--star-inactive)">★</span>
+                                </div>
+                                <span class="rating-score lang-zh">4.5</span>
+                                <span class="rating-count lang-zh">(2.8k)</span>
+                                <span class="rating-score lang-en">4.5</span>
+                                <span class="rating-count lang-en">(2.8K)</span>
+                            </div>
+                        </div>
+                        <div class="link-description lang-zh">AI 驱动的角色扮演聊天平台，提供多样化的虚拟角色和互动场景，支持深度对话和情感模拟，通过自然语言处理创造沉浸式社交体验，为用户提供娱乐和情感交流空间</div>
+                        <div class="link-description lang-en">AI-driven role-playing chat platform offering diverse virtual characters and interactive scenarios with deep conversation and emotion simulation through natural language processing</div>
+                    </a>
                 </div>
             </section>
         </main>
@@ -2313,6 +2605,105 @@
                     updateUsageCount();
                 });
             });
+        }
+
+        // 添加语言切换时更新评分显示的处理
+        function updateLanguage(lang) {
+            document.documentElement.lang = lang;
+            // 现有语言切换逻辑保持不变
+            
+            // 更新评分显示
+            document.querySelectorAll('.rating-score, .rating-count').forEach(el => {
+                if (lang === 'en') {
+                    // 英文格式：使用K而不是k表示千位，逗号分隔数字等
+                    if (el.classList.contains('rating-count')) {
+                        // 已经在HTML中预设了英文格式
+                    }
+                } else {
+                    // 中文格式保持不变
+                }
+            });
+        }
+
+        // 添加一个函数来自动更新所有卡片的评分格式
+        function updateAllRatings() {
+            document.querySelectorAll('.link-card').forEach(card => {
+                const ratingScore = card.querySelector('.rating-score');
+                const ratingCount = card.querySelector('.rating-count');
+                
+                if (ratingScore && !ratingScore.classList.contains('lang-zh') && !ratingScore.classList.contains('lang-en')) {
+                    // 获取原始评分
+                    const scoreValue = ratingScore.textContent;
+                    const countValue = ratingCount.textContent;
+                    
+                    // 创建中文版本
+                    const zhScore = document.createElement('span');
+                    zhScore.className = 'rating-score lang-zh';
+                    zhScore.textContent = scoreValue;
+                    
+                    // 创建英文版本 (保持数字相同，但格式可能不同)
+                    const enScore = document.createElement('span');
+                    enScore.className = 'rating-score lang-en';
+                    enScore.textContent = scoreValue;
+                    
+                    // 创建中文版本的评价数量
+                    const zhCount = document.createElement('span');
+                    zhCount.className = 'rating-count lang-zh';
+                    zhCount.textContent = countValue;
+                    
+                    // 创建英文版本的评价数量 (将"k"改为"K")
+                    const enCount = document.createElement('span');
+                    enCount.className = 'rating-count lang-en';
+                    enCount.textContent = countValue.replace('k', 'K');
+                    
+                    // 替换原始元素
+                    ratingScore.parentNode.insertBefore(zhScore, ratingScore);
+                    ratingScore.parentNode.insertBefore(enScore, ratingScore);
+                    ratingCount.parentNode.insertBefore(zhCount, ratingCount);
+                    ratingCount.parentNode.insertBefore(enCount, ratingCount);
+                    
+                    // 移除原始元素
+                    ratingScore.remove();
+                    ratingCount.remove();
+                }
+            });
+        }
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 其他初始化代码...
+            
+            // 更新所有评分
+            updateAllRatings();
+        });
+        
+        // 修改语言切换函数
+        function switchLanguage(lang) {
+            const langElements = document.querySelectorAll('.lang-zh, .lang-en');
+            
+            langElements.forEach(el => {
+                if (el.classList.contains(`lang-${lang === 'zh' ? 'zh' : 'en'}`)) {
+                    el.style.display = 'block';
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+            
+            // 更新语言按钮状态
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                if ((btn.textContent === '中文' && lang === 'zh') || 
+                    (btn.textContent === 'English' && lang === 'en')) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // 更新文档语言
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+            
+            // 保存用户语言偏好
+            localStorage.setItem('preferred-language', lang);
         }
     </script>
 </body>
